@@ -1,0 +1,36 @@
+Cross Cutting concerns:
+Security
+Validation 
+Error Handling
+Logging 
+Data Persistence: Persistence refers to the characteristic of the state that outlives it. Without this capability
+state would only exist in RAM and would be lost when the power to RAM is lost such as a computer shutdown.
+
+When we are working with a web application then all the information is saved in secondary storage.
+
+This information can be fetched in a later time.
+
+
+So for most developer Object relational Mapping means to work with a relational database.
+&&&&&&&&&&&&&&&&&&
+Definition of ORM:
+&&&&&&&&&&&&&&&&&&
+Hence ORM is a technique which uses Meta data to connect object oriented code to a relational database
+
+******************
+Why do we need ORM
+******************
+1. Reduces persistent code, development time and maintenance time
+2. Bridges the gap between the data model and object model
+3. Removes the SQL from the application logic supporting the DRY principle
+4. Facilitates building of the persistent layer
+5. Key management problem sorted out
+6. Familar persistent implementation
+7. open source well tested solution.
+
+
+
+
+
+
+

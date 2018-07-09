@@ -1,0 +1,81 @@
+It is an Object Relational Mapping
+
+It implements the JPA specification.
+
+JPA specification is part of Java EE platform. And it defines a specification of persisting data.
+
+This is only a subset of specification.
+
+There are other pieces of the framework that do not adhere to this specification.
+
+
+The job of Hibernate is to make persisting data easier.
+And the way we do that is by providing meta-data.
+And that meta-data is to provide persitent operations automated and we no longer need to use JDBC and no longer manually need
+to create SQL statements.
+
+Another interesting option provided by hibernate is HQL (Hibernate Query Language).
+It is similar to SQL however it allows to Query Objects that are created in the Object Oriented Design.
+
+Technical Perspective How hibernate works:
+
+
+The first thing we need in hibernate is
+------------------ 
+Configuration File
+------------------
+1. configuration file provided by Hibernate.cfg.xml file or hibernate properties.
+This file is used to specify our connection information to the database along with other properties that instruct 
+hibernate how to perform.
+
+----------------------
+Defining our Meta-Data
+----------------------
+2. How to map our entities with our relational database.
+An entity is a plain old Java Object so we have a class fields and some getters and setters with those fields.
+and normally those fields correspond to the columns in the database. 
+And the class itself correspond the table in the database.
+
+In the past XML files was used heavily for this purpose.
+From Java 5.0 annotations are possible for configuring our POJO's
+
+Once we have configuration file and how to define our meta-data has been decided we will look into other aspects.
+-------
+Session
+-------
+We use a session factory to get a session.
+
+But why do we need a session?
+The session factory holds all our configuration and our mapping meta-data and with this information  
+We are then ready to create our session object
+
+What is the importance of Session Object:
+With the session object we can invoke persistence methods. And those methods are the ones we will perform CRUD operations
+for each of the entities.
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+Benefits of Using Hibernate:
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+1. it removes the SQL from our code.
+2. It automates the creation of SQL so that data persistence is performed for us instead of us writing the SQL manually for that 
+operation.
+3. It reduces our development time.
+4. Reduces lines of code.
+5. It makes our code more maintenable
+6. Since it is following standards hence it becomes to transition over and start something from scratch.
+7. It really abstracts the code from our RDBMS hence we can easily migrate database.
+8. Lot of tutorial and help us with us any technical problem.
+
+@@@@@@@@@@@@@@@@@@@@@@@
+Hibernate Configuration
+@@@@@@@@@@@@@@@@@@@@@@@
+Can be specified in 3 Manners
+1. Properties File
+2. XML File (Most Preferred)
+3. Configuration through Java Code(This is most least used)
+
+
+ 
+
+

@@ -1,0 +1,54 @@
+public static void main(String[] args) {
+    EntityManagerFactory entityManagerFactory =  Persistence.createEntityManagerFactory("testjpa");
+    EntityManager em = entityManagerFactory.createEntityManager();
+    EntityTransaction userTransaction = em.getTransaction();
+    
+    userTransaction.begin();
+    Customer customer = new Customer();
+    customer.setFirstName("Charles");
+    customer.setLastName("Dickens");
+    customer.setCustType("RETAIL");
+    customer.setStreet("10 Downing Street");
+    customer.setAppt("1");
+    customer.setCity("NewYork");
+    customer.setZipCode("12345");
+    em.persist(customer);
+    userTransaction.commit();
+    em.close();
+    entityManagerFactory.close();
+}
+
+
+The action starts with the Persistence class.
+
+The javadoc says, "Persistence is a bootstrap class that is used to obtain an EntityManagerFactory," like so
+
+EntityManagerFactory emf=Persistence.createEntityManagerFactory("testjpa");
+
+The work of the Persistence class is pretty simple:
+
+In the classpath resources, the Persistence class searches for javax.persistence.spi.PersistenceProvider files in 
+META-INF/services/directory. 
+It reads the PersistenceProvider implementation class names from each file.
+
+It then calls createEntityManagerFactory() on each PersistenceProvider with the persistenceUnitName until it gets a an EntityManagerFactory back that isn't null. 
+The provider name for OpenJPA is org.apache.openjpa.persistence.PersistenceProviderImpl.
+
+How does PersistenceProvider get the right EntityManagerFactory? This is up to the vendor to implement.
+
+EntityManagerFactory is a factory for creating an EntityManager. 
+
+EntityManagerFactory should be cached and should ideally be called once for each persistence unit name 
+in the whole application.
+
+
+EntityManager manages entities; it is responsible for their addition, updating, and deletion.
+ You can find an entity without a transaction; however, add, update, and delete operations need to 
+ be within a transaction.
+ 
+ If you ignore transaction management in a fetch operation, the entity does not become managed and 
+ hence the system will do a trip to the database every time you try to fetch a record from the data store; 
+ in such a scenario, you'd end up fetching a separate object every time.
+ 
+ 
+ 

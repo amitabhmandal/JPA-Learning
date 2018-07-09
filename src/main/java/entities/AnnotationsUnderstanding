@@ -1,0 +1,54 @@
+
+
+
+@Enitity signifies that a particular class is an entity class.
+ If the entity name is different from the table name, then the @Table annotation is used; 
+ otherwise, 
+it isn't required.
+An entity is a light weight persistence domain object within a database.
+
+The state of an entity is represented through it's fields.
+
+The fields are also mapped to the underlying database through annotations.
+
+The entity annotation signals to hibernate that the current type may participate in the session
+and be persisted to the underlying database.
+
+@Table annotation - has a name element, and within the name we specify the name of the table.
+
+
+
+@Column provides the name of the column in a table if it is different from the attribute name. 
+(By default, the two names are assumed to be the same.)
+
+
+@Id signifies the primary key. it denotes the primary key in the table of the database.
+
+@GeneratedValue annotation - Is used to specify how we obtain the value of the primary key 
+for a particular field.
+Some databases uses auto number, some use sequences, also have the option for hibernate to 
+provide the value and we can use the @GeneratedValue to specify that.
+
+@GeneratedValue(strategy = GenerationType.IDENTITY) - 
+
+
+
+
+
+@Version signifies a version field in an entity. JPA uses a version field to detect 
+concurrent modifications to a data store record. When the JPA runtime detects multiple 
+attempts to concurrently modify the same record, it throws an exception to the transaction 
+attempting to commit last. This prevents you from overwriting the previous commit with stale data.
+
+
+By default, all the fields are of type @Basic, which are persisted as-is in the database.
+
+
+@GeneratedValue signifies a strategy to assign a unique value to your identity fields 
+automatically. The types of strategies available are IDENTITY, SEQUENCE, TABLE, and AUTO. 
+The default strategy is auto, the implementation of which is left to the JPA vendor to implement.
+ (OpenJPA implements it through a table sequence.)
+
+
+
+

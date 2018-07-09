@@ -1,0 +1,102 @@
+It is important because we are not writing data to a single table.
+
+A relationship is established when a child table defines a foreign key referencing the
+primary key of its parent table
+
+• one-to-many is the most common relationship, and it associates a row from a parent
+table to multiple rows in a child table.
+
+• one-to-one is a variation of the one-to-many relationship with an additional uniqueness
+constraint on the child-side foreign key.
+
+• many-to-many requires a junction table containing two foreign keys that reference two
+different parent tables.
+
+In a relational database, the foreign key is associated with the child-side only. For this reason,
+the parent-side has no knowledge of any associated child relationships, and, from a mapping
+perspective, table relationships are always unidirectional (the child foreign key references the
+parent primary key).
+
+It is how different objects within our system are connected.
+
+How to Map different associations between entities so that hibernate is able to persist the 
+entities within the database.
+
+These are not value types hence they have their own identifiers and their own life cycles.
+
+Understanding bidirectional and unidirectional associations.
+
+Bidirectional Association - Obtains two associations 
+Unidirectional Association - Obtains one associations.
+
+Owning Entities and Non owning entities.
+
+In order to establish relationship between these associations we might need to use 
+Join Column or Join Table association
+
+Depending on which entity the annotation(JoinTable/JoinColumn) resides on we can conclude
+whether it is the owning or non-owning entity
+
+=========================================
+Owning entity = Where join table falls on
+=========================================
+
+-------------------------------------------------------------------------------------
+Owning entity in case of bidirectional associations has always the foreign key column
+_____________________________________________________________________________________
+
+One to Many is known as Parent Child relationship
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+What seperates these associations from collections or value types?
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Reference from one entity to another.
+
+An entity is an object which is a mapped to a single class and has it's own identity.
+Thus it shall have a primary key within the database and has it's own lifecycle.
+
+Entity associations is supported by underlying database that support the relationship.
+
+Within entity association there is a source object and a target object.
+
+****************************
+Types of Entity Associations
+****************************
+----------
+One to One : One account is associated with one set of credentials
+----------
+Source Object:
+Target Object:
+Performance  : 
+
+more example: 
+One person one passport 
+One person one ID card
+One person one Pan Cord.
+------------
+One to Many : One account with many transactions
+------------
+Source Object:
+Target Object:
+Performance  : 
+
+------------
+Many to One: Which is inverse of One to Many.
+------------
+This can be many transactions are associated with one account
+Source Object:
+Target Object:
+Performance  : 
+
+
+-------------
+Many to Many: Multiple users can be associated with multiple accounts.
+-------------
+This is when we have to use a junction table.
+Source Object:
+Target Object:
+Performance  : 
+
+
+ 
+

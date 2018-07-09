@@ -1,0 +1,50 @@
+Now that the entity class is complete, you can move on to persistence.xml, shown in 
+
+<?xml version="1.0"?>
+<persistence>
+    <persistence-unit name="testjpa" transaction-type="RESOURCE_LOCAL">
+        <provider>
+            org.apache.openjpa.persistence.PersistenceProviderImpl
+        </provider>
+        <class>entity.Customer</class>
+        <properties>
+            <property name="openjpa.ConnectionURL"          value="jdbc:derby://localhost:1527/D:\OpenJPA\Derby\testdb;create=true"/>
+            <property name="openjpa.ConnectionDriverName" 
+            value="org.apache.derby.jdbc.ClientDriver"/>
+            <property name="openjpa.ConnectionUserName" value="admin"/>
+            <property name="openjpa.ConnectionPassword" value="admin"/>
+    <property name="openjpa.Log" value="SQL=TRACE"/>
+        </properties>
+    </persistence-unit>
+</persistence>
+
+
+This is an XML file placed in the META-INF folder; it's used to specify the persistence 
+provider name, entity class names, and properties like the database connection URL, driver, 
+user, password, and so on.
+
+****************************************
+important points about persistence units
+****************************************
+#1
+persistence.xml can have multiple persistence units. Each unit can be used by different JPA 
+vendor or can be used to persist to different databases.
+
+#2
+The vendor-specific persistence provider name is specified in the <provider> tag.
+The persistence provider for OpenJPA is 
+org.apache.openjpa.persistence.PersistenceProviderImpl.
+
+#3
+The entity class names are specified in the <class> tag.
+
+#4
+The database connection properties can be specified within the <properties> tag. 
+Note that the property name will differ for each vendor.
+
+#5
+OpenJPA has its own default logging facility, the default level of which is INFO.
+
+
+
+

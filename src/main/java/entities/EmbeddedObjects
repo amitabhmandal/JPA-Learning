@@ -1,0 +1,38 @@
+As you've seen so far, the Customer entity has the address information inline in the entity itself. 
+What if you want to apply class normalization concepts and come up with a separate Address class and refer to 
+that in the Customer entity? After all, an address object could be used with Customer, Employee, Order, or 
+User entities.
+
+All you need is an embedded object. You move the address information into a separate class and mark that class 
+as being embeddable, as shown in Listing 10. Refer to this newly created class from the Customer entity with 
+@Embedded annotations.
+
+Listing 10. An embeddable class
+@Embeddable
+public class Address implements Serializable{
+    
+    private String street;
+    
+    @Column(name = "APPT",nullable = false)  
+    private String appt;
+
+    private String city;
+..
+..
+}
+
+Embedded classes are mapped together with their owning entity as part of the state of that entity. 
+However, they cannot be queried separately. 
+Listing 11 illustrates a sample entity that uses an embedded object.
+
+ A sample entity using an embedded object
+@Entity
+public class Customer {
+...............
+    @Column(name = "FIRST_NAME", nullable = false,length = 50)
+    private String firstName;
+        
+    @Embedded
+    private Address address;
+..............
+}

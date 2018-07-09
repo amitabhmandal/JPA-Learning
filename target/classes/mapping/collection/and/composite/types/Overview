@@ -1,0 +1,171 @@
+Providing mapping metadata for a composite value type
+
+Map a collection of basic value types
+Example: List<String> or List<Integer> or 
+
+
+Map a collection of composite value types.
+
+Thus collections can hold basic value types or composite value types.
+
+In either case we are working with a value type.
+
+=====================
+Composite Value Types
+=====================
+It is a group of basic value types. Hence it is a group of fields stored in one class.
+
+
+FOr example Bank has an Address. Since Address is a reusable component we can take it 
+outside the bank class.
+
+The Address class in this instance will be a field type in the bank entity.
+Thus address cannot survive without bank class and does not have it's own lifecycle
+
+
+**********************************
+And then embedded within an entity
+**********************************
+
+Composite Types = Embedded(JPA) / Composite Types(Hibernate)
+When we are talking about JPA then composite value types are called embedded(JPA)
+
+Point to remember: 
+1. These are not entities
+2. They do not have their life cycle hence it will not stored in a seperate table but as a part of 
+the owning entity. Hence the bank table will be storing information about the address 
+within the bank table.
+3. The only time we will persist an embedded/composite type is when the owning entity 
+is persisted
+4. Does not have it's own unique identified( @Id) or table.
+5. Only persisted or queried in the context of it's parent
+6. Embeddable annotation is not mandatory to be used on the composite type.
+
+======================
+Collection Value Types
+======================
+When we map these collection value types they need to have their own table.
+It can hold basic or composite value types.
+Collection of composite/basic value types need to be stored in their own table.
+
+They do not have their own life cycle. Target objects cannot be queried, persisted, merged 
+independently of their parent object.
+
+Do not have a unique identity.
+
+
+
+and the same are called composite type in hibernate
+================================================================================================
+Composite  Example: Bank containing Address. Address can be seperated out into a different class.
+================================================================================================
+	@Embedded ////However placing this annotation is optional. Hibernate when mapping the information
+	//will visit the Address type and seeing the annotation embeddable it would know that it needs
+	to make Address a composite value type
+	
+	//However it is nice to put it there as a programmer it would be nice to know what is going on
+	private Address address = new Address();
+	
+	
+	Within the Address class we can place one more annotation
+	
+	@Embeddable 
+	public class Address{
+	
+	}
+Address is just a logical entity which can be re-used.
+Moreover address does not have it's own life-cycle.
+Hence it does not have it's own identifier. Thus it will be using bank's identifier.
+Hence address will be persisted in the same table as in the bank.
+
+Creating the composite value type in this makes the Address class reusable and it can be used in 
+any other places.
+
+    @AttributeOverrides({
+            @AttributeOverride(name = "addressLine1", column = @Column(name = "USER_ADDRESS_1")),
+            @AttributeOverride(name = "addressLine2", column = @Column(name = "USER_ADDRESS_2"))
+    })
+    @Embedded
+    private Address address;
+======================================================================================================
+Composite  Example: User containing Address however the address columns in the user are different names
+=======================================================================================================
+here we will have to use attribute over-ride so that the address class which was used in the bank
+can now be re-used in the user table information.
+
+        @Embedded
+        @AttributeOverrides({@AttributeOverride(name="addressLine1", column=@Column(name="USER_ADDRESS_LINE_1")),
+        @AttributeOverride(name="addressLine2" , column=@Column(name="USER_ADDRESS_LINE_2"))
+        })
+        private Address address = new Address();	
+	
+=================================================
+Collection of Basic Value Type : List | Set etc
+=================================================
+The difference between collection of basic value type and embeddable type is that 
+the embeddable is stored within the table for example bank is storing the address information 
+within the table.
+
+In the Collection of basic value types it is not going to work like that because we will have 
+a collection of basic types which is in multiple. 
+Hence the owning entity cannot have duplicate rows of the same information just in order
+to cater to the need of the collection types
+
+
+Thus to solve the above problem we need another table which would contain
+the information in the following fashion
+New table
+Primary Key of owning information along with collection of the type as well as primary key.
+Hence it will be storing a composite of primary keys.
+
+THIS IS VERY IMPORTANT POINT ELSE WE WILL HAVE DUPLICATE VALUES IN THE NEW TABLE.
+HENCE WE NEED TO HAVE COMPOSITE OF PRIMARY KEYS THAT INCLUDES BOTH THE COLUMN NAMES
+
+For example it can be
+1. List of Strings
+2. Set of Strings
+
+@ElementCollection means we are trying to map instances of fields which are of type collections
+and are of basic or composite type[which]
+	
+	@ElementCollection [Step 1 ]
+	@CollectionTable(name="BANK_CONTACT", joinColumns=@JoinColumn(name="BANK_ID"))
+	@Column(name="NAME")
+	private List<String> contacts = new ArrayList<String>();	
+
+===========================================
+Collection of Basic Value Type : Map 
+===========================================
+    @ElementCollection
+    @CollectionTable(name = "BANK_CONTACT", joinColumns = @JoinColumn(name = "BANK_ID"))
+    @MapKeyColumn(name = "POSITION_TYPE")
+    @Column(name = "NAME")
+    private Map<String, String> contacts = new HashMap<String, String>();
+
+
+=====================================================
+Composite Collection Mapping Example Annotation Usage
+=====================================================
+        @Embedded
+        @AttributeOverrides({@AttributeOverride(name="addressLine1", column=@Column(name="USER_ADDRESS_LINE_1")),
+        @AttributeOverride(name="addressLine2" , column=@Column(name="USER_ADDRESS_LINE_2"))
+        })
+        private List<Address> address = new ArrayList<Address>();
+    
+===========================================
+mapping a Collection of composite types
+===========================================
+
+Composite class Example: Address type
+which is itself is composite of basic value types
+
+Address does not have it's own identity 
+and it does need to have an owning entity
+
+
+        @ElementCollection
+        @CollectionTable(name="USER_ADDRESS", joinColumns=@JoinColumn(name="USER_ID"))
+        @AttributeOverrides({@AttributeOverride(name="addressLine1", column=@Column(name="USER_ADDRESS_LINE_1")),
+        @AttributeOverride(name="addressLine2" , column=@Column(name="USER_ADDRESS_LINE_2"))
+        })
+        private List<Address> address = new ArrayList<Address>();

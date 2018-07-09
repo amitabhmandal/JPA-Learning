@@ -1,0 +1,6 @@
+JPA: How to?
+You'll need three artifacts to implement a JPA-compliant program:
+
+An entity class
+A persistence.xml file
+A class through which you will insert, update, or find an entity

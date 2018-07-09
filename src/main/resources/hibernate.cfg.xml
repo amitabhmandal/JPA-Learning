@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        <!-- Database connection settings -->
+        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/ifinances</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password">12345678</property>
+
+        <!-- SQL dialect -->
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+
+
+        <!-- Echo all executed SQL to stdout -->
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.format_sql">true</property>
+
+<!--         <mapping class="entities.NewUser"/> -->
+<!--         <mapping class="mapping.collection.and.composite.types.Address"/> -->
+<!--         <mapping class="mapping.collection.and.composite.types.Bank"/> -->
+<!--         <mapping class="mapping.collection.and.composite.types.User"/> -->
+        <mapping class="mapping.collection.and.composite.types.BankCollectionType"/>
+<!--         <mapping class="mapping.collection.and.composite.types.BankMapCollectionType"/> -->
+<!--         <mapping class="mapping.collection.and.composite.types.UserCompositeAddressCollection"/> -->
+        <mapping class="entity.associations.one.to.one.Credential"/>
+        <mapping class="entity.associations.one.to.one.User"/>
+        <mapping class="entities.NewUser"/>
+
+    </session-factory>
+
+</hibernate-configuration>

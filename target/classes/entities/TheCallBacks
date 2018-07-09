@@ -1,0 +1,42 @@
+JPA provides callback methods for performing actions at different stages of persistence operations. 
+Imagine that you want to update a customer record, but, before you update, you want to remove the hyphen from the
+ zip code if one is present. Or say that you want to populate some transient fields after a successful fetch. 
+ JPA provides listeners for these kinds of activities before and after each fetch, insert, or update operation.
+  The callback methods can be annotated as any of the following:
+  
+@PostLoad
+
+@PrePersist
+
+@PostPersist
+
+@PreUpdate
+
+@PostUpdate
+
+@PreRemove
+
+@PostRemove
+
+You can write the callback methods in the entity class itself, or you can write them in a 
+separate class and reference them in the entity class with @EntityListeners,
+
+
+implementing callback
+
+@EntityListeners({CustListner.class})
+@Entity(name = "CUSTOMER") //Name of the entity
+public class Customer implements Serializable{
+...
+...
+}
+public class CustListner {
+    @PreUpdate
+    public void preUpdate(Customer cust) {
+         System.out.println("In pre update");
+    }
+    @PostUpdate
+    public void postUpdate(Customer cust) {
+         System.out.println("In post update");
+    }
+}

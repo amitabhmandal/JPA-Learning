@@ -1,0 +1,15 @@
+There are a few points to keep in mind when creating an entity class:
+
+JPA allows persistent classes to inherit from non-persistent classes, persistent classes to 
+inherit from other persistent classes, and non-persistent classes to inherit from persistent 
+classes.
+
+The entity class should have a default no-argument constructor.
+
+The entity class should not be final.
+
+Persistent classes cannot inherit from certain natively-implemented system classes such as 
+java.net.Socket and java.lang.Thread.
+
+If a persistent class inherits from a non-persistent class, the fields of the non-persistent 
+super class cannot be persisted.

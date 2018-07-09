@@ -1,0 +1,106 @@
+An entity can extend the following:
+
+#1
+Another entity -- either concrete or abstract.
+
+#2
+Another non-entity, supplying behavior or non-persistence state. 
+The attributes you inherit from a non-entity are not persisted.
+
+#3
+Mapped superclasses, supplying common entity state. 
+Tables in a database have similar fields, but tables are not related to each other.
+
+Let's have a look into the various types of inheritance JPA offers. 
+For this scenario, assume that there are two types of customer: a normal customer who buys products 
+from a physical store and an online customer who buys products over the Internet.
+
+Single-table inheritance
+In single-table inheritance, all the entities in the hierarchy are stored in a single table. 
+Single-table inheritance is the default strategy. Thus, you could omit the @Inheritance annotation 
+in the example code in Listing 12 and get the same result.
+
+The Customer entity has custId, firstName, lastName, custType, and address information, 
+whereas the OnlineCustomer entity has only a website attribute and otherwise extends all features of
+ Customer. This strategy should be reflected in the superclass, as in Listing 12.
+ 
+ A sample superclass in single-table inheritance
+ 
+@Entity(name = "CUSTOMER") 
+@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="CUST_TYPE", discriminatorType=DiscriminatorType.STRING,length=10)
+@DiscriminatorValue("RETAIL")
+public class Customer implements Serializable{
+    @Id 
+    @Column(name = "CUST_ID", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long custId;
+    
+    @Column(name = "FIRST_NAME", nullable = false,length = 50)
+    private String firstName;
+    
+    @Column(name = "LAST_NAME", length = 50)
+    private String lastName;
+    
+    @Embedded
+    private Address address = new Address();
+    
+    @Column(name = "CUST_TYPE", length = 10)
+    private String custType;
+................
+}
+
+A sample subclass in single-table inheritance
+
+@Entity(name = "ONLINECUSTOMER") //Name of the entity
+@DiscriminatorValue("ONLINE")
+public class OnlineCustomer extends Customer{
+    @Column(name = "WEBSITE", length = 100)
+    private String website;
+    ............
+}
+
+Now you must create a Customer object and an OnlineCustomer object and persist them, as in Listing 14.
+
+userTransaction.begin();
+//inserting Customer
+Customer customer = new Customer();
+customer.setFirstName("Charles");
+customer.setLastName("Dickens");
+customer.setCustType("RETAIL");
+customer.getAddress().setStreet("10 Downing Street");
+customer.getAddress().setAppt("1");
+customer.getAddress().setCity("NewYork");
+customer.getAddress().setZipCode("12345");
+em.persist(customer);
+//Inserting Online customer
+OnlineCustomer onlineCust = new OnlineCustomer();
+onlineCust.setFirstName("Henry");
+onlineCust.setLastName("Ho");
+onlineCust.setCustType("ONLINE");
+onlineCust.getAddress().setStreet("1 Mission Street");
+onlineCust.getAddress().setAppt("111");
+onlineCust.getAddress().setCity("NewYork");
+onlineCust.getAddress().setZipCode("23456");
+onlineCust.setWebsite("www.amazon.com");
+em.persist(onlineCust);
+userTransaction.commit();
+......................
+
+ Fetching only the subclass in single-table inheritance
+ 
+ Query query = em.createQuery("SELECT customer FROM ONLINECUSTOMER customer");
+List<OnlineCustomer> list= query.getResultList();
+
+If the CUSTOMER table stores both the Customer and the OnlineCustomer data, 
+how will JPA distinguish one from the other? How will it fetch only the online customers? 
+In fact, JPA cannot do this unless you provide it with a hint. That's the significance of the
+ @DiscriminatorColumn. It tells the CUSTOMER table which column distinguishes a CUSTOMER from an 
+ ONLINE CUSTOMER. @DiscriminatorValue indicates what value identifies a CUSTOMER and an ONLINE CUSTOMER. 
+ The @DiscriminatorValue annotation needs to be provided in the superclass as well as in all the subclasses.
+
+When you want to fetch online customers, JPA silently queries the data store as in Listing 16. 
+
+Distinguishing objects stored in a single table
+SELECT t0.CUST_ID, t0.CUST_TYPE, t0.LAST_UPDATED_TIME, t0.APPT, t0.city, t0.street, t0.ZIP_CODE, t0.FIRST_NAME, t0.LAST_NAME, t0.WEBSITE FROM CUSTOMER t0 
+WHERE t0.CUST_TYPE = 'ONLINE'

@@ -1,0 +1,26 @@
+===================
+Value Type Meanings:
+====================
+
+#1
+No database identity: Does not contain @Id annotation
+
+#2
+Embedded with an Entity, hence they do not have any life cycle of their own
+
+#3
+3 sub-categories of value types: 
+1. basic types - Like String, long etc
+2. composite types - Like addresses etc which is part of some entity however they dont have their own
+	@Id field
+3. collection types - They represent a group of basic value types such as List<String> etc.
+When it comes to collection types then they have different kinds of mapping for List<String> which 
+represents basic value types and List<Entity> which is represented by different mapping.
+
+
+Basic Value Type:
+It is always mapped to a single database column value.
+It is non aggregated Java type. By non-aggregated means it does not contain any other fields.
+
+
+

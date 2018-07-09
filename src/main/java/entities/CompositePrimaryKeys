@@ -1,0 +1,44 @@
+A composite primary key
+Now, how do you find a record in the database with a primary key if the entity has a composite primary key? 
+You'll see how that works in a moment. Assume that the CUSTOMER table doesn't have a CUST_ID field, but that 
+FIRST_NAME and LAST_NAME together make up the primary key. To make this work, you need to create a separate class, 
+generally called an identity class, with attributes the same as the IDs; then you reference the identity class 
+in the entity class. 
+This is shown in Listing 7.
+
+An identity class
+public class CustomerId {
+    public String firstName;
+    public String lastName;
+    // override equal() method
+    //override hascode() method
+..................
+}
+
+The identity class can be a separate class or an inner class. 
+If the class is an inner class, it must be static and should be referenced in the entity class, 
+as in Listing 8. The code for finding records with a composite primary key is exactly the same as 
+that for finding records with a single primary key.
+
+Using an identity class
+
+@Entity
+@IdClass(Customer.CustomerId.class)
+public class Customer implements Serializable{
+    @Id
+    @Column(name = "FIRST_NAME", nullable = false, length = 50)
+    private String firstName;
+
+    @Id
+    @Column(name = "LAST_NAME", length = 50)
+    private String lastName;
+
+    private String street;
+
+    @Column(name = "APPT",nullable = false)  
+    private String appt;
+    
+................
+}
+
+

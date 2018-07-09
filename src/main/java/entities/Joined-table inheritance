@@ -1,0 +1,69 @@
+In the joined-table inheritance strategy, the common states of the class are stored in one table,
+ and the state of the subclass is stored in another table that is joined to the first table, 
+ as shown in Table 3.
+ 
+ Table 3. Joined-table inheritance mapping strategy
+ENTITY				TABLE NAME
+Customer				CUSTOMER
+OnlineCustomer		ONLINECUSTOMER (only Website information is stored here; the rest of the information is stored in the CUSTOMER table)
+
+
+The common data that the OnlineCustomer entity shares with Customer is stored in the CUSTOMER table;
+ OnlineCustomer-specific data is stored in the ONLINECUSTOMER table, connected by a foreign key constraint. 
+ From the JPA implementation standpoint, the only change needed in the OnlineCustomer entity is that the 
+ JOINED strategy must be provided, as in Listing 17.
+ 
+ A superclass in joined-table inheritance
+ 
+ @Entity(name = "CUSTOMER") //Name of the entity
+@Inheritance(strategy=InheritanceType.JOINED)
+@DiscriminatorColumn(name="CUST_TYPE", discriminatorType=DiscriminatorType.STRING,length=10)
+@DiscriminatorValue("RETAIL")
+
+public class Customer implements Serializable{
+    @Id //signifies the primary key
+    @Column(name = "CUST_ID", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long custId;
+    
+    @Column(name = "FIRST_NAME", nullable = false,length = 50)
+    private String firstName;
+    
+    @Column(name = "LAST_NAME", length = 50)
+    private String lastName;
+    
+    @Embedded
+    private Address address = new Address();
+    
+    @Column(name = "CUST_TYPE", length = 10)
+    private String custType;
+    .................
+}
+
+In the OnlineCustomer entity, shown in Listing 18, you specify the subclass-specific attributes and a 
+foreign key join column with the @PrimaryKeyJoinColumn annotation, which maps to the primary key of the
+ parent table.
+ 
+A sample subclass in joined-table inheritance
+
+@Table(name="ONLINECUSTOMER")
+@Entity(name = "ONLINECUSTOMER") //Name of the entity
+@DiscriminatorValue("ONLINE")
+@PrimaryKeyJoinColumn(name="CUST_ID",referencedColumnName="CUST_ID")
+public class OnlineCustomer extends Customer{
+
+    @Column(name = "WEBSITE", length = 100)
+    private String website;
+    ................
+}
+
+In Listing 18, the name property of @PrimaryKeyJoinColumn denotes the primary key of the subclass table. 
+referencedColumnName denotes the name of the superclass table column to which this subclass table column joins.
+ Nothing changes in the way in which you persist and fetch the Customer and OnlineCustomer objects.
+ 
+ 
+ 
+ Joined-table inheritance
+In the joined-table inheritance strategy, the common states of the class are stored in one table,
+ and the state of the subclass is stored in another table that is joined to the first table, as shown in Table 3. 
+
