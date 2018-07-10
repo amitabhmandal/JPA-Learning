@@ -1,0 +1,28 @@
+JP QL supports two types of parameter binding syntax. The first is 
+======================
+1. positional binding 
+======================
+where parameters are indicated in the query string by a question mark followed by the 
+parameter number.
+When the query is executed, the developer specifies the parameter number that should be 
+replaced.
+
+Positional Parameter Notation Example:
+SELECT e
+FROM Employee e
+WHERE e.department = ?1 AND
+e.salary > ?2
+
+================
+2. Named binding 
+================
+Named parameters may also be used and are indicated in the query string by a colon followed by
+the parameter name.
+When the query is executed, the developer specifies the parameter name that
+should be replaced.
+
+For example:
+SELECT e
+FROM Employee e
+WHERE e.department = :dept AND
+e.salary > :base

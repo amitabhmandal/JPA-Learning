@@ -1,0 +1,9 @@
+Entity Manager is the interface which is used to interact with the Persistence Context
+
+The entity Manager is the API which is used to 
+1. create 
+2. remove persistence entity contexts 
+3. to find entities by their primary keys
+4. and to query over entities
+
+

@@ -15,3 +15,50 @@ packaged in the same persistence unit.
 
 The query language uses an SQL-like syntax to select objects or values based on
  entity abstract schema types and relationships among them.
+
+
+JPA supports two methods for expressing queries to retrieve entities and other persistent data
+from the database: 
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+High Level Difference Between JPQL and Criteria API
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+JPQL:
+a database-independent query language that operates on the
+logical entity model as opposed to the physical data model.
+
+Queries may also be expressed in SQL to
+take advantage of the underlying database.
+
+Criteria API:
+The criteria API provides an alternative method for constructing queries based on Java 
+objects instead of query strings.
+
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+Difference between SQL and JPQL
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+1. The key difference between SQL and JP QL for this query is that instead of selecting from a 
+table, an entity from the application domain model has been specified instead.
+
+2. We might need to use an alias in case of JPQL
+
+3. we can navigate across entity relationships using the dot (.) operator. Example
+employee.name
+
+4.  We can also select an entity we didn’t even list in the FROM clause
+For example: SELECT e.department FROM Employee e
+
+5. Filtering Results: The key difference for JP QL is that entity expressions and not column
+references are used
+For example: 
+SELECT e
+FROM Employee e
+WHERE e.department.name = 'NA42' AND
+e.address.state IN ('NY','CA')
+
+6. Projecting Results: 
+
+
+
+
+

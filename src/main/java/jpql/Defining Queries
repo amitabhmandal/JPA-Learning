@@ -1,0 +1,85 @@
+JPA provides the
+===== 
+Query : is used in cases when the result type is Object
+=====
+ and 
+========== 
+TypedQuery : is used in the typical case when typed results are preferred.
+==========
+interfaces 
+
+to configure and execute queries
+
+                             ++++++++++++++++++++++++++
+They are both present in the javax.persistence package
+                             ++++++++++++++++++++++++++
+                             
+
++++++++++++++++++++++
+IMPORTANT CONCLUSION: TypedQuery is child interface of Query:
+********************* 
+As TypedQuery extends Query, a strongly typed query can always be
+treated as an untyped version, though not vice versa
+
+The TypedQuery interface was introduced in JPA 2.0.
+
+Queries are represented in JPA 2 by two interfaces - the old Query interface, 
+which was the only interface available for representing queries in JPA 1, 
+and the new TypedQuery interface that was introduced in JPA 2. The TypedQuery 
+interface extends the Query interface.
+
+In JPA 2 the Query interface should be used mainly when the query result type is 
+unknown or when a query returns polymorphic results and the lowest known 
+common denominator of all the result objects is Object. When a more specific result
+ type is expected queries should usually use the TypedQuery interface. 
+ It is easier to run queries and process the query results in a type safe manner 
+ when using the TypedQuery interface.
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+There are two approaches to defining a JP QL query
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+OPTION - 1:  A query may either be dynamically specified at runtime or 
+OPTION - 2:  configured in persistence unit  metadata (annotation or XML) and referenced by name.
+
+Dynamic queries are nothing more than strings, and therefore may be defined on the fly 
+as the need arises.
+
+Named queries, on the other hand, are static and unchangeable, but are more efficient to
+execute because the persistence provider can translate the JP QL string to SQL once when the
+application starts as opposed to every time the query is executed.
+
++++++++++++++
+dynamic query : createQuery() method of the EntityManager interface.
++++++++++++++
+
+1. A query may be defined dynamically by passing the JP QL query string and expected result type to 
+the createQuery() method of the EntityManager interface.
+
+2. The result type may be omitted to create an untyped query.
+
+advantage -->>
+3. The ability to build up a string at runtime and use it for a query definition is useful,
+particularly for applications where the user may specify complex criteria and the exact shape of the
+query cannot be known ahead of time.
+
+disadvantage -->>
+4. An issue to consider with string dynamic queries, however, is the cost of translating the JP QL
+string to SQL for execution. 
+A typical query engine will have to parse the JP QL string into a syntax
+tree, get the object-relational mapping metadata for each entity in each expression, and then generate
+the equivalent SQL. For applications that issue many queries, the performance cost of dynamic query
+processing can become an issue.
+
+Many query engines will cache the translated SQL for later use, but this can easily be defeated if
+the application does not use parameter binding and concatenates parameter values directly into
+query strings. This has the effect of generating a new and unique query every time a query that
+requires parameters is constructed.
+
+We recommend statically defined named queries in general, particularly for queries that are
+executed frequently. If dynamic queries are a necessity, take care to use parameter binding instead of
+concatenating parameter values into query strings in order to minimize the number of distinct query
+strings parsed by the query engine.
+
+
+
