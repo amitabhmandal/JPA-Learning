@@ -1,0 +1,35 @@
+What's wrong with this JPQL query?
+
+JPA 1.0 introduced JPQL, a powerful query language that's considered a major reason for 
+JPA's popularity. However, JPQL — being a string-based query language with a definite grammar
+ — has a few limitations. To understand one of the major limitations, consider the simple 
+ code fragment in Listing 1, which executes a JPQL query to select the list of Persons 
+ older than 20 years:
+ 
+ Listing 1. A simple (and wrong) JPQL query
+ 
+EntityManager em = ...;
+String jpql = "select p from Person where p.age > 20";
+Query query = em.createQuery(jpql);
+List result = query.getResultList();
+
+This basic example shows the following key aspects of the query-execution model in JPA 1.0:
+
+A JPQL query is specified as a String (line 2).
+
+EntityManager is the factory that constructs an executable query instance given a 
+JPQL string (line 3).
+The result of query execution consists of the elements of an untyped java.util.List.
+
+
+But this simple example has a serious error. Effectively, the code will compile happily, 
+but it will fail at run time because the JPQL query string is syntactically incorrect. 
+The correct syntax for the second line of Listing 1 is:
+
+String jpql = "select p from Person p where p.age > 20";
+
+Unfortunately, the Java compiler has no way to detect such an error. The error will be 
+encountered at run time at line 3 or line 4 (depending on whether the JPA provider parses a 
+JPQL string according to JPQL grammar during query construction or execution).
+
+

@@ -58,7 +58,7 @@ the createQuery() method of the EntityManager interface.
 
 2. The result type may be omitted to create an untyped query.
 
-advantage -->>
+advantage -->> WHERE IT SHOULD BE MOST USEFUL -->>
 3. The ability to build up a string at runtime and use it for a query definition is useful,
 particularly for applications where the user may specify complex criteria and the exact shape of the
 query cannot be known ahead of time.

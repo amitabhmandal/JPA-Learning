@@ -1,0 +1,54 @@
+============================
+Named Query Definition
+============================
+
+Named queries are a powerful tool for organizing query definitions and improving application
+performance.
+
+A named query is defined using the @NamedQuery annotation, which may be placed on the
+class definition for any entity
+
+Listing 7-9. Defining a Named Query
+@NamedQuery(name="findSalaryForNameAndDepartment",
+query="SELECT e.salary " +
+"FROM Employee e " +
+"WHERE e.department.name = :deptName AND " +
+" e.name = :empName")
+
+
+Named queries are typically placed on the entity class that most directly corresponds to the query
+result, so the Employee entity would be a good location for this named query.
+
+The garbage normally associated with repeated string concatenation will not
+apply here because the annotation will be processed only once at startup time and be executed at
+runtime in query form.
+
+The name of the query is scoped to the entire persistence unit and must be unique within that
+scope.
+
+This is an important restriction to keep in mind, as commonly used query names such as
+"findAll" will have to be qualified for each entity. A common practice is to prefix the query name with
+the entity name. For example, the "findAll" query for the Employee entity would be named
+"Employee.findAll".
+
+Multiple Named Queries for an Entity
+@NamedQueries({
+@NamedQuery(name="Employee.findAll",
+query="SELECT e FROM Employee e"),
+@NamedQuery(name="Employee.findByPrimaryKey",
+query="SELECT e FROM Employee e WHERE e.id = :id"),
+@NamedQuery(name="Employee.findByName",
+query="SELECT e FROM Employee e WHERE e.name = :name")
+})
+
+
+Because the query string is defined in the annotation, it cannot be altered by the application at
+runtime. This contributes to the performance of the application and helps to prevent the kind of
+security issues we discussed in the previous section. Due to the static nature of the query string, any
+additional criteria that are required for the query must be specified using query parameters
+
+
+Named parameters are the most practical choice for named queries because they effectively selfdocument
+the application code that invokes the queries. Positional parameters are still supported,
+however, and may be used instead.
+

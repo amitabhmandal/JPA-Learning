@@ -1,0 +1,96 @@
+JPA supports both named and positional parameters for JPQL queries
+
+The query factory methods of the entity manager return an implementation of the Query interface.
+
+Parameter values are then set on this object using the setParameter() methods of the Query interface.
+
+          ()()()()()()()()
+There are three variations of this method for both named parameters and positional parameters.
+          ++++++++++++++++
+          
+=========
+OPTION :1
+=========
+The first argument is always the parameter name or number.
+
+=========
+OPTION :2
+=========
+The second argument is the object to be bound to the named parameter.
+
+
+@NamedQuery(name="findEmployeesAboveSal",
+query="SELECT e " +
+"FROM Employee e " +
+"WHERE e.department = :dept AND " +
+" e.salary > :sal")
+
+This query highlights one of the nice features of JP QL in that entity types may be used as
+parameters. When the query is translated to SQL, the necessary primary key columns will be inserted
+into the conditional expression and paired with the primary key values from the parameter. It is not
+necessary to know how the primary key is mapped in order to write the query. Binding the parameters
+for this query is a simple case of passing in the required Department entity instance as well as a long
+representing the minimum salary value for the query.
+
+public List<Employee> findEmployeesAboveSal(Department dept,
+long minSal) {
+return em.createNamedQuery("findEmployeesAboveSal",
+Employee.class)
+.setParameter("dept", dept)
+.setParameter("sal", minSal)
+.getResultList();
+}
+
+
+=========
+OPTION :3
+=========
+
+Date and Calendar parameters also require a third argument that specifies whether the type passed to JDBC is a 
+java.sql.Date, java.sql.Time, or java.sql.TimeStamp value.
+
+
+public List<Employee> findEmployeesHiredDuringPeriod(Date start,
+Date end) {
+return em.createQuery("SELECT e " +
+"FROM Employee e " +
+"WHERE e.startDate BETWEEN ?1 AND ?2",
+Employee.class)
+.setParameter(1, start, TemporalType.DATE)
+.setParameter(2, end, TemporalType.DATE)
+.getResultList();
+}
+
+
+====================
+ONE IMPORTANT THING:
+====================
+
+One thing to keep in mind with query parameters is that the same parameter can be used multiple
+times in the query string yet only needs to be bound once using the setParameter() method. For
+example, consider the following named query definition, where the "dept" parameter is used twice in
+the WHERE clause:
+
+@NamedQuery(name="findHighestPaidByDepartment",
+query="SELECT e " +
+"FROM Employee e " +
+"WHERE e.department = :dept AND " +
+" e.salary = (SELECT MAX(e.salary) " +
+" FROM Employee e " +
+" WHERE e.department = :dept)")
+
+
+public Employee findHighestPaidByDepartment(Department dept) {
+return em.createNamedQuery("findHighestPaidByDepartment",
+Employee.class)
+.setParameter("dept", dept)
+.getSingleResult();
+}
+
+
+
+
+
+
+
+

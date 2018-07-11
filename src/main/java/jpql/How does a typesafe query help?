@@ -1,0 +1,44 @@
+One of the major advantages of the Criteria API is that it prohibits the construction 
+of queries that are syntactically incorrect. 
+
+Listing 2 rewrites the JPQL query in Listing 1 using the CriteriaQuery interface:
+
+Listing 2. Basic steps of writing a CriteriaQuery
+
+1 EntityManager em = ...
+2 CriteriaBuilder qb = em.getCriteriaBuilder();
+3 CriteriaQuery<Person> c = qb.createQuery(Person.class);
+4 Root<Person> p = c.from(Person.class);
+5 Predicate condition = qb.gt(p.get(Person_.age), 20);
+6 c.where(condition);
+7 TypedQuery<Person> q = em.createQuery(c); 
+8 List<Person> result = q.getResultList();
+
+Listing 2  illustrates the Criteria API's core constructs and demonstrates its basic usage:
+
+Line 1 obtains an EntityManager instance by one of the several available means.
+
+In line 2, EntityManager creates an instance of CriteriaBuilder. 
+CriteriaBuilder is the factory for CriteriaQuery.
+
+In line 3, the CriteriaBuilder factory constructs a CriteriaQuery instance. 
+A CriteriaQuery is generically typed. The generic type argument declares the 
+type of result this CriteriaQuery will return upon execution. You can supply 
+various kinds of result-type arguments — from a persistent entity such as Person.class 
+to a more free-form one such as Object[]— while constructing a CriteriaQuery.
+
+In line 4, query expressions are set on the CriteriaQuery instance.
+Query expressions are the core units or nodes that are assembled in a tree to 
+specify a CriteriaQuery. Figure 1 shows the hierarchy of query expressions defined 
+in the Criteria API:
+
+
+
+
+
+
+
+
+
+
+

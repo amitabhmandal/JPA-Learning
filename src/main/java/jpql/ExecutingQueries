@@ -1,0 +1,65 @@
+The Query and TypedQuery interfaces each provide three different ways to execute a query depending
+on whether or not the query returns results and how many results should be expected.
+
+The Query and TypedQuery interfaces each provide three different ways to execute a query, depending
+on whether or not the query returns results and how many results should be expected
+
+For queries that return values,
+
+===========================
+OPTION 1: getSingleResule()
+=========================== 
+the developer may choose to call either getSingleResult() if the query is expected to
+return a single result.
+
+The getSingleResult() method is provided as a convenience for queries that return only a single
+value.
+
+however, that getSingleResult() behaves differently from getResultList() in how it
+handles unexpected results.
+
+Whereas getResultList() returns an empty collection when no results are
+available, getSingleResult() throws a NoResultException exception
+
+Therefore if there is a chance that the desired result may not be found, then this exception needs to be handled.
+
+If multiple results are available after executing the query instead of the single expected result,
+getSingleResult() will throw a NonUniqueResultException exception.
+
+=========================
+OPTION 2: getResultList()
+=========================
+getResultList() if more than one result may be returned.
+
+It returns a collection containing the query results. If the query did not return any data, the collection is empty.
+The return type is specified as a List instead of a Collection in order to support queries that specify a sort order.
+If the query uses the ORDER BY clause to specify a sort order, the results will be put into the result list in
+the same order.
+
+Queries are unordered by default.
+
+public void displayProjectEmployees(String projectName) {
+List<Employee> result = em.createQuery(
+"SELECT e " +
+"FROM Project p JOIN p.employees e "+
+"WHERE p.name = ?1 " +
+"ORDER BY e.name",
+Employee.class)
+.setParameter(1, projectName)
+.getResultList();
+int count = 0;
+for (Employee e : result) {
+System.out.println(++count + ": " + e.getName() + ", " +
+e.getDepartment().getName());
+}
+}
+
+=========================
+OPTION 3: executeUpdate()
+=========================
+executeUpdate() method is used to invoke bulk update and delete queries
+
+
+Note that both of the query interfaces define the same set of methods and differ only in their return types.
+
+
