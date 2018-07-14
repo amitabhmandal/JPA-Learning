@@ -1,0 +1,38 @@
+A database system must allow concurrent access to the underlying data. However, shared data
+means that read and write operations must be synchronized to ensure that data integrity is
+not compromised.
+
+
+To control concurrent modifications, the Java programming language defines the synchronized
+keyword for two purposes:
+
+• It can restrict access to a shared Object (to preserve invariants), so only a Thread can
+execute a routine at any given time.
+• It propagates changes from the current Thread local memory to the global memory that
+is available to all running threads of executions.
+
+This behavior is typical for other concurrent programming environments and database
+systems are no different. In a relational database, the mechanism for ensuring data integrity
+is implemented on top of transactions.
+
+A transaction is a collection of read and write operations that can either succeed or fail
+together, as a unit. All database statements must execute within a transactional context, even
+when the database client does not explicitly define its boundaries.
+
+In 1981, Jim Gray first defined the properties of a database transaction in his famous paper:
+The transaction concept: virtues and limitations1. Both this paper and the first versions of
+the SQL standard (SQL-86 and SQL-89) only used three properties for defining a database
+transaction: Atomicity, Consistency, and Durability.
+
+Along with other relation database topics, the transaction research has continued ever since,
+and so the SQL-92 version introduced the concept of Isolation Levels. These four properties
+have been assembled in the well-known ACID (Atomicity, Consistency, Isolation, and Durability)
+acronym that soon became synonym with relation database transactions.
+
+Knowing how database transactions work is very important for two main reasons:
+
+• effective data access (data integrity should not be compromised when aiming for highperformance)
+• efficient data access (reducing contention can minimize transaction response time
+which, in turn, increases throughput).
+
+
